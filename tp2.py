@@ -3,77 +3,64 @@ import platform
 import time
 import pygame
 
-memoria = psutil.virtual_memory()
+# tamanho da tela
+largura_tela = 800
+altura_tela = 600
 
-capacidade = round(memoria.total/(1024*1024*1024), 2)
-# print(capacidade)
+# cores disponiveis
+preto = (0, 0, 0)
+azul = (0, 0, 255)
+vermelho = (255, 0, 0)
+branco = (255, 255, 255)
+cinza = (100, 100, 100)
 
-# informações do processador
-processador = platform.processor()
-# print(processador)
+tela = pygame.display.set_mode((largura_tela, altura_tela))
+pygame.display.set_caption("Carlos Henrique Info")
 
-# informações da rede
-rede = platform.node()
-# print(rede)
+superficie_dados = pygame.surface.Surface((largura_tela, 50))
+superficie_memoria = pygame.surface.Surface((largura_tela, 100))
+superficie_cpu = pygame.surface.Surface((largura_tela, 150))
+superficie_disco = pygame.surface.Surface((largura_tela, 200))
 
-# detalhes da plataforma
-plataforma = platform.platform()
-# print(plataforma)
+pygame.font.init()
+font = pygame.font.SysFont(None, 55)
+pygame.display.init()
+clock = pygame.time.Clock()
 
-# sistema operacional
-sistema = platform.system()
-# print(sistema)
+# deve desenhar um grafico com o total de memoria usado
+def mostra_uso_memoria(s):
+    s.fill(cinza)
 
-percentual_cpu = psutil.cpu_percent()
-# print(percentual_cpu)
-
-# fazendo o pc trabalhar para ver o percentual subir
-# for i in range(0, 100):
-#     print(psutil.cpu_percent())
-#     time.sleep(i)
-
-# informações do disco
-disco = psutil.disk_usage('/')
-total_disco = disco.total
-disco_usado = disco.used
-disco_livre = disco.free
-
-# print(round(total_disco / (1024 * 1024 * 1024), 2))
-# print(round (disco_usado / (1024 * 1024 * 1024), 2))
-# print(round (disco_livre / (1024 * 1024 * 1024), 2))
-
-# percentual do disco
-percentual_disco = disco.percent
-# print(percentual_disco)
-
-dic_interfaces = psutil.net_if_addrs()
-# print(dic_interfaces)
-
-
-########################################################################
-# Mostar uso de memória
-def mostra_uso_memoria():
     mem = psutil.virtual_memory()
     larg = largura_tela - 2*20
     tela.fill(preto)
+    
     pygame.draw.rect(tela, azul, (20, 50, larg, 70))
     larg = larg * mem.percent/100
+    
     pygame.draw.rect(tela, vermelho, (20, 50, larg, 70))
+
     total = round(mem.total/(1024*1024*1024),2)
     texto_barra = "Uso de Memória (Total: " + str(total) + "GB):"
     text = font.render(texto_barra, 1, branco)
-    tela.blit(text, (20, 10))
-    
-def mostra_uso_cpu():
+    s.blit(text, (20, 20))
+
+# deve desenhar um gráfico com o total de cpu usado
+def mostra_uso_cpu(s):
+    s.fill(cinza)
+
     capacidade = psutil.cpu_percent(interval=0)
     larg = largura_tela - 2*20
     tela.fill(preto)
+
     pygame.draw.rect(tela, azul, (20, 50, larg, 70))
     larg = larg * capacidade/100
+    
     pygame.draw.rect(tela, vermelho, (20, 50, larg, 70))
     text = font.render("Uso de CPU:", 1, branco)
-    tela.blit(text, (20, 10))
-    
+    s.blit(text, (20, 30))
+
+# deve desenhar um gráfico com o total de disco usado
 def mostra_uso_disco():
     disco = psutil.disk_usage('.')
     larg = largura_tela - 2*20
@@ -85,26 +72,18 @@ def mostra_uso_disco():
     texto_barra = "Uso de Disco: (Total: " + str(total) + "GB):"
     text = font.render(texto_barra, 1, branco)
     tela.blit(text, (20, 10))
-    
 
+# deve escrever os dados de rede
+def escrever_dados():
+    superficie_dados.fill(branco)
+    mostra_texto(superficie_dados, "IP:", 10)
+    tela.blit(superficie_dados, (0, 0))
 
-largura_tela = 800
-altura_tela = 600
+def mostra_texto(s1, nome, pos_y):
+    text = font.render(nome, True, preto)
+    superficie_dados.blit(text, (10, pos_y))
 
-tela = pygame.display.set_mode((largura_tela, altura_tela))
-pygame.display.set_caption("Uso de memória")
-
-preto = (0, 0, 0)
-azul = (0, 0, 255)
-vermelho = (255, 0, 0)
-branco = (255, 255, 255)
-
-pygame.font.init()
-font = pygame.font.SysFont(None, 55)
-
-pygame.display.init()
-
-clock = pygame.time.Clock()
+################################APLICACAO#######################################
 
 terminou = False
 count = 60
@@ -116,8 +95,9 @@ while not terminou:
             terminou = True
     
     if count == 60:
-        # mostra_uso_memoria()
-        mostra_uso_cpu()
+        mostra_uso_memoria(superficie_memoria)
+        mostra_uso_cpu(superficie_cpu)
+        escrever_dados()
         #mostra_uso_disco()
         count = 0    
         
@@ -125,37 +105,3 @@ while not terminou:
     clock.tick(60)
         
 pygame.display.quit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

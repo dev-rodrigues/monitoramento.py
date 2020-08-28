@@ -45,6 +45,7 @@ def mostra_info_cpu():
 def mostra_texto(s1, nome, chave, pos_y):
     text = font.render(nome, True, preto)
     s1.blit(text, (40, pos_y))
+    
     if chave == "freq":
         s = str(round(psutil.cpu_freq().current, 2))
         
@@ -71,7 +72,7 @@ def mostrar_uso_cpu(s, l_cpu_percent):
         pygame.draw.rect(s, vermelho, (d, y, larg, alt))
         pygame.draw.rect(s, azul, (d, y, larg, (1-i/100)*alt))
         d = d + larg + desl
-        tela.blit(s, (0, altura_tela/5))
+        tela.blit(s, (0, 140))
 
 while not terminou:
     

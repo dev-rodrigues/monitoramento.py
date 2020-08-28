@@ -1,0 +1,22 @@
+# memoria = psutil.virtual_memory()
+
+# capacidade = round(memoria.total/(1024*1024*1024), 2)
+
+# processador = platform.processor()
+
+# rede = platform.node()
+
+# plataforma = platform.platform()
+
+# sistema = platform.system()
+
+# percentual_cpu = psutil.cpu_percent()
+
+# disco = psutil.disk_usage('/')
+# total_disco = disco.total
+# disco_usado = disco.used
+# disco_livre = disco.free
+
+# percentual_disco = disco.percent
+
+# dic_interfaces = psutil.net_if_addrs()
