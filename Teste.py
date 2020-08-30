@@ -11,7 +11,7 @@ cinza = (100, 100, 100)
 azul = (0, 0, 255)
 vermelho = (255, 0, 0)
 
-largura_tela = 1050
+largura_tela = 800
 altura_tela = 600
 
 # configurações da tela
@@ -23,8 +23,8 @@ pygame.display.init()
 pygame.font.init()
 font = pygame.font.SysFont(None, 20)
 
-superficie = pygame.surface.Surface((largura_tela, 200))
-superficie_grafico = pygame.surface.Surface((largura_tela, 400))
+superficie = pygame.surface.Surface((largura_tela, int(altura_tela/3)))
+superficie_grafico = pygame.surface.Surface((largura_tela, int(altura_tela/3)))
 
 clock = pygame.time.Clock()
 
